@@ -1,0 +1,24 @@
+_mode=cross
+pkgname=firmware-msm8953-xiaomi-mido
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(custom:Proprietary)
+options=(!strip)
+_commit=bc001cbb255a0ded2b58af07b93f712cd9322483
+source=(
+    "git+https://github.com/Kiciuk/proprietary_firmware_mido#commit=$_commit"
+)
+sha256sums=(
+    SKIP
+)
+_fwdir="/usr/lib/firmware/qcom/msm8953/xiaomi/mido"
+
+package() {
+    cd "$srcdir/proprietary_firmware_mido/apnhlos"
+
+    install -Dm644 a506_zap.mdt -t "$pkgdir/$_fwdir"
+    install -Dm644 a506_zap.b02 -t "$pkgdir/$_fwdir"
+
+}

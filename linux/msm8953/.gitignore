@@ -1,0 +1,3 @@
+*.tar.gz
+linux-panel-drivers/
+config-*.aarch64

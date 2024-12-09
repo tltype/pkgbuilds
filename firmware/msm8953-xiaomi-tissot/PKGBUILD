@@ -1,0 +1,30 @@
+_mode=cross
+pkgname=firmware-msm8953-xiaomi-tissot
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(custom:Proprietary)
+options=(!strip)
+_commit=bc001cbb255a0ded2b58af07b93f712cd9322483
+source=(
+    "git+https://github.com/Kiciuk/proprietary_firmware_mido#commit=$_commit"
+)
+sha256sums=(
+    SKIP
+)
+# "git+https://gitlab.com/jiaxyga/firmware-xiaomi-tissot"
+# for unknown reason default pmos gpu blobs from tissot repo don't work
+# mido gpu blobs are used instead
+_fwdir="/usr/lib/firmware/qcom/msm8953/xiaomi/tissot"
+
+package() {
+    cd "$srcdir/proprietary_firmware_mido/firmware"
+    
+    install -Dm644 a506_zap.mdt -t "$pkgdir/$_fwdir"
+    install -Dm644 a506_zap.b02 -t "$pkgdir/$_fwdir"
+    
+    install -Dm644 a530_pfp.fw -t "$pkgdir/$_fwdir"/qcom
+    install -Dm644 a530_pm4.fw -t "$pkgdir/$_fwdir"/qcom
+
+}

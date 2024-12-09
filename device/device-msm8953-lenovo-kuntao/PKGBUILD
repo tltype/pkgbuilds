@@ -1,0 +1,46 @@
+_mode=cross
+_nodeps=true
+pkgname=device-msm8953-lenovo-kuntao
+pkgdesc="Lenovo P2"
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(MIT)
+makedepends=(devicepkg-helpers)
+_commit=080cbb2859324019d238c2305af0558c8db2a7a5
+depends=(
+    device-msm8953-common
+    firmware-msm8953-lenovo-kuntao
+    qbootctl
+    q6voiced
+)
+source=(
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/testing/device-lenovo-kuntao/deviceinfo"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/testing/device-lenovo-kuntao/modules-initfs"
+    machine-info
+)
+sha256sums=(
+    c29cb21d3016bc5f5d62589017bf9d6da4d50f8b61517ee52aa7fed279d2a979
+    4be6a517ccab82e29201fce240f55254a5f9ce8d27e62193a028a6ab3b9e07a3
+    7729d6a89258b470cadd48cfbc704bab7791501c53f45f50737dea6b441a3171
+)
+
+package() {
+    cp "$srcdir"/deviceinfo "$srcdir"/deviceinfo_
+    cat >>"$srcdir"/deviceinfo_ <<EOF
+
+deviceinfo_partitions_data="/dev/mmcblk0p56"
+deviceinfo_partitions_microsd="/dev/mmcblk1"
+
+deviceinfo_lk2nd="true"
+EOF
+
+# compability with kupfer: init scripts expect the list of modules to be a variable in the deviceinfo file
+    cat >>"$srcdir"/deviceinfo_ <<EOF
+    
+deviceinfo_modules_initfs="$(cat "$srcdir"/modules-initfs | tr '\n' ' ')"
+EOF
+    install -Dm644 "$srcdir"/deviceinfo_ "$pkgdir"/etc/kupfer/deviceinfo
+    install -Dm644 "$srcdir"/machine-info "$pkgdir"/etc/machine-info
+}

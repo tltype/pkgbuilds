@@ -1,0 +1,23 @@
+_mode=cross
+pkgname=firmware-msm8953-lenovo-kuntao
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(custom:Proprietary)
+options=(!strip)
+source=(
+    "git+https://gitlab.com/raihan2000/firmware-lenovo-kuntao"
+)
+sha256sums=(
+    SKIP
+)
+_fwdir="/usr/lib/firmware/qcom/msm8953/lenovo/kuntao"
+
+package() {
+    cd "firmware-lenovo-kuntao"
+
+    install -Dm644 a506_zap.mdt -t "$pkgdir/$_fwdir"
+    install -Dm644 a506_zap.b02 -t "$pkgdir/$_fwdir"
+
+}

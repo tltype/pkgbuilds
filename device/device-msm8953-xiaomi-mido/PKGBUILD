@@ -1,0 +1,46 @@
+_mode=cross
+_nodeps=true
+pkgname=device-msm8953-xiaomi-mido
+pkgdesc="Xiaomi Redmi Note 4"
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(MIT)
+makedepends=(devicepkg-helpers)
+_commit=897dd2b8320c02acdfcf2c30c7013f7baea9b604
+depends=(
+    device-msm8953-common
+    firmware-msm8953-xiaomi-mido
+    qbootctl
+    q6voiced
+)
+source=(
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-mido/deviceinfo"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-mido/modules-initfs"
+    machine-info
+)
+sha256sums=(
+    bbd8af3cccdfab770a57a59900ee1a45b0f15c6e6e88cc07bd52333d7739580b
+    fc08f52709f393db5b15cee15233753c742c70514af0da440bf183171f93cf13
+    7729d6a89258b470cadd48cfbc704bab7791501c53f45f50737dea6b441a3171
+)
+
+package() {
+    cp "$srcdir"/deviceinfo "$srcdir"/deviceinfo_
+    cat >>"$srcdir"/deviceinfo_ <<EOF
+
+deviceinfo_partitions_data="/dev/mmcblk0p49"
+deviceinfo_partitions_microsd="/dev/mmcblk1"
+
+deviceinfo_lk2nd="true"
+EOF
+
+# compability with kupfer: init scripts expect the list of modules to be a variable in the deviceinfo file
+    cat >>"$srcdir"/deviceinfo_ <<EOF
+    
+deviceinfo_modules_initfs="$(cat "$srcdir"/modules-initfs | tr '\n' ' ')"
+EOF
+    install -Dm644 "$srcdir"/deviceinfo_ "$pkgdir"/etc/kupfer/deviceinfo
+    install -Dm644 "$srcdir"/machine-info "$pkgdir"/etc/machine-info
+}

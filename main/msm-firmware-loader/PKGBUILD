@@ -1,0 +1,63 @@
+_mode=cross
+_nodeps=true
+pkgname=msm-firmware-loader
+pkgdesc="Set of init services to automatically load firmware from device partitions"
+pkgver=1.5.0
+pkgrel=1
+_arches=specific
+arch=(
+    aarch64
+    armhf
+    armv7
+)
+license=(MIT)
+
+source=(
+    "https://gitlab.postmarketos.org/postmarketOS/msm-firmware-loader/-/archive/$pkgver/msm-firmware-loader-$pkgver.tar.gz"
+    msm-firmware-loader.service
+    msm-firmware-loader-unpack.service
+    remoteproc-reloader.sh
+    wifi-powersave.conf
+    10-network.rules
+    firmware_load.lst
+)
+sha256sums=(
+    605d86d2eb165b47e8858cd5f599626f7ef3ea74fdd600419b63b3a3727b1734
+    f49ac22ec8ded4ffddf60b6a21aca9b0c63585d6743ecaa491a3e6ccc8c9ae5a
+    0565182504233da3e80c62cf429637ae825df49b06bf0cd4d97e558544e98be4
+    cfae5490913165dd1a2ee44c874514700d001e6e808ce067aa56c7f92fabeb55
+    8919a1f7a8ab8c8a11c89e6046fe9141bab1a21cb3dcd7add7bca22248a8b564
+    1ad2e717f8ade93c9c4e3b45b9a34f8cdee600e3436b256e8c540119a6f99fb1
+    3c488e42b8395279c3148f7bd89c64d5235016f7da3f9e795f02a32a6398bef3
+)
+
+package() {
+    mkdir -p "$pkgdir"
+    
+    # install services unit files
+    install -Dm755 msm-firmware-loader.service \
+        "$pkgdir"/usr/lib/systemd/system/msm-firmware-loader.service
+    install -Dm755 msm-firmware-loader-unpack.service \
+        "$pkgdir"/usr/lib/systemd/system/msm-firmware-loader-unpack.service
+    
+    # enable services via kupfer-config
+    install -Dm644 "$srcdir"/firmware_load.lst "$pkgdir"/etc/kupfer/systemd/firmware_load.lst
+
+    # Create mountpoint for the scripts
+    mkdir -p "$pkgdir"/usr/lib/firmware/msm-firmware-loader
+    
+    install -Dm755 "$srcdir/msm-firmware-loader-$pkgver/msm-firmware-loader.sh" \
+        "$pkgdir"/usr/bin/msm-firmware-loader.sh
+    install -Dm755 "$srcdir/msm-firmware-loader-$pkgver/msm-firmware-loader-unpack.sh" \
+        "$pkgdir"/usr/bin/msm-firmware-loader-unpack.sh
+    install -Dm755 "$srcdir"/remoteproc-reloader.sh "$pkgdir"/usr/bin/remoteproc-reloader.sh
+    
+    # Turn off Wi-Fi powersave to improve wlan connection latency (200ms avg vs 2ms avg on local network)
+    # https://gist.github.com/jcberthon/ea8cfe278998968ba7c5a95344bc8b55
+    # Maybe that's not needed, but I faced this problem and the fix helped me
+    install -Dm755 "$srcdir"/wifi-powersave.conf "$pkgdir"/etc/NetworkManager/conf.d/wifi-powersave.conf
+    
+    # Set MTU=1380 to avoid ssh session hangups on huge transmissions
+    # Maybe that's not needed, but I faced this problem and the fix helped me
+    install -Dm755 "$srcdir"/10-network.rules "$pkgdir"/etc/udev/rules.d/10-network.rules
+}

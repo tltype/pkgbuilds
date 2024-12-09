@@ -1,0 +1,75 @@
+_mode=cross
+_nodeps=true
+pkgname=device-msm8953-common
+pkgdesc="Common package for Qualcomm MSM8953 devices"
+pkgver=0.1
+pkgrel=1
+_arches=specific
+arch=(aarch64)
+license=(MIT)
+provides=(alsa-ucm-conf)
+conflicts=(alsa-ucm-conf)
+depends=(
+    linux-firmware-qcom
+    linux-msm8953
+    boot-lk2nd-msm8953-git
+    qrtr-git
+    rmtfs-git
+    boot-android-common
+    meta-modem-qcom
+    q6voiced
+    msm-firmware-loader
+)
+_ucm_commit=f6dfc9b072e74b0ab2afcf452bc106242049ef28
+_pmos_commit=897dd2b8320c02acdfcf2c30c7013f7baea9b604
+source=(
+    "git+https://github.com/msm8953-mainline/alsa-ucm-conf.git/#commit=$_ucm_commit"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom-msm8953/90-feedbackd-pm8xxx-vib.rules"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom-msm8953/q6voiced.conf"
+    msm8953-common.conf
+    51-soundfix.conf
+    adreno-a506-quirks.sh
+    msm8953_callaudio.lst
+)
+sha256sums=(
+    SKIP
+    5ad4650f48fab20e4d93dfde00687e10048a0e426a745ede313168f02e31367c
+    21b8395e7729c785c0446be5d88e52873b0fa46812111b91bcd5c3af7dde24da
+    a7286f4ce62030d4de277e82640ea6d37344c5d030d365119ccacdc72b6dcfbe
+    0d1675f4ff950591a5a51b21280edbd86c820783c8609833dbde86f9769014ce
+    54d6d3d16d4110a6116f5a09810a06f2381a5e6512833d18343edb882098f7d6
+    4891a7c232524d0385b760e1f44375a7772f8e2e6c70568dbd5415df3384a568
+)
+
+package() {
+    install -Dm644 "$srcdir"/msm8953-common.conf "$pkgdir"/etc/kupfer/mkinitcpio.conf.d/msm8953-common.conf
+
+    # taken from pmos:
+    install -Dm644 "$srcdir"/90-feedbackd-pm8xxx-vib.rules "$pkgdir"/usr/lib/udev/rules.d/90-feedbackd-pm8xxx-vib.rules
+    install -Dm644 "$srcdir"/q6voiced.conf "$pkgdir"/etc/conf.d/q6voiced
+    install -Dm644 "$srcdir"/adreno-a506-quirks.sh "$pkgdir"/etc/profile.d/adreno-a506-quirks.sh
+
+    # enable q6voiced via kupfer-config
+    install -Dm644 "$srcdir"/msm8953_callaudio.lst "$pkgdir"/etc/kupfer/systemd/user/msm8953_callaudio.lst
+
+    # alsa ucm config
+    cd "$srcdir"/alsa-ucm-conf
+    export alsadir="${pkgdir}/usr/share/alsa/"
+    find ucm2 -type f -iname "*.conf" -exec install -vDm 644 {} "$alsadir"{} \;
+    find ucm2 -type l -iname "*.conf" -exec bash -c 'install -vdm 755 "${alsadir}$(dirname "{}")" && cp -dv "{}" "${alsadir}{}"' \;
+    install -vDm 644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
+    install -vDm 644 README.md -t "$pkgdir/usr/share/doc/$pkgname"
+    install -vDm 644 ucm2/README.md -t "$pkgdir/usr/share/doc/$pkgname/ucm2"
+
+    # pipewire low volume and crackling fix
+    # taken from here: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/3193
+    install -Dm644 "$srcdir"/51-soundfix.conf "$pkgdir"/usr/share/wireplumber/wireplumber.conf.d/51-soundfix.conf
+
+    # Could not activate connection: not authorized to control networking
+    mkdir -p "$pkgdir"/etc/NetworkManager/conf.d
+    cat >>"$pkgdir"/etc/NetworkManager/conf.d/any-user.conf <<EOF
+
+[main]
+auth-polkit=false
+EOF
+}

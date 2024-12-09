@@ -1,14 +1,12 @@
 _mode=cross
 pkgbase=boot-lk2nd-git
-pkgname=(
-    boot-lk2nd-msm8916-git
-    boot-lk2nd-msm8974-git
-    boot-lk2nd-msm8226-git
-)
-pkgver=r5870.6961b9fc
+pkgver=19.0.r15.g2660019
 pkgrel=1
 _arches=specific
-arch=(aarch64)
+arch=(
+    aarch64
+    armv7
+)
 license=(MIT)
 url=https://github.com/msm8916-mainline/lk2nd
 provides=(boot-lk2nd)
@@ -17,38 +15,36 @@ makedepends=(
     dtc
     arm-none-eabi-gcc
 )
-_commit=6961b9fc1c9f3551c2a7d354e395aa23041f1a9d
+_commit=26600197fc12852e7e561c72d5240508d3e97305
 source=("git+$url#commit=$_commit")
 sha256sums=(SKIP)
 
+_targets="msm8916 msm8974 msm8226 msm8952 msm8953"
+pkgname=()
+for target in $_targets; do pkgname+=("${pkgbase%-git}-$target-git"); done
+
 pkgver() {
     cd "$srcdir"/lk2nd
-    # TODO: change to --short=7 next bump
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=8 HEAD)"
+    git describe --long --abbrev=7 --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
     cd "$srcdir"/lk2nd
-    rm -rf build-lk2nd-msm8916 build-lk2nd-msm8974 build-lk2nd-msm8226
-    make TOOLCHAIN_PREFIX=arm-none-eabi- lk2nd-msm8916
-    make TOOLCHAIN_PREFIX=arm-none-eabi- lk2nd-msm8974
-    make TOOLCHAIN_PREFIX=arm-none-eabi- lk2nd-msm8226
+    rm -rf build-lk2nd-*
+    for target in $_targets; do
+        make TOOLCHAIN_PREFIX=arm-none-eabi- "lk2nd-$target";
+    done
 }
 
-package_boot-lk2nd-msm8916-git() {
-    provides+=(lk2nd-msm8916)
-    install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8916/lk2nd.img "${pkgdir}/boot/lk2nd.img"
-    install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8916/lk2nd-appended-dtb.img "${pkgdir}/boot/lk2nd-appended-dtb.img"
+_package() {
+    local target=${1%%-git}
+    pkgdesc="lk2nd for ${target##lk2nd-} platform"
+    provides+=("$target")
+    install -Dm644 "$srcdir/lk2nd/build-$target/lk2nd.img" "${pkgdir}"/boot/lk2nd.img
 }
 
-package_boot-lk2nd-msm8974-git() {
-    provides+=(lk2nd-msm8974)
-    install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8974/lk2nd.img "${pkgdir}/boot/lk2nd.img"
-    #install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8974/lk2nd-appended-dtb.img "${pkgdir}/boot/lk2nd-appended-dtb.img"
-}
-
-package_boot-lk2nd-msm8226-git() {
-    provides+=(lk2nd-msm8226)
-    #install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8226/lk2nd.img "${pkgdir}/boot/lk2nd.img"
-    install -Dm644 "$srcdir"/lk2nd/build-lk2nd-msm8226/lk2nd-appended-dtb.img "${pkgdir}/boot/lk2nd-appended-dtb.img"
-}
+for p in "${pkgname[@]}"; do
+    eval "package_${p}() {
+    _package ${p##boot-}
+  }"
+done

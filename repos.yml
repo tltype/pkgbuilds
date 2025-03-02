@@ -37,13 +37,11 @@ base_distros:
     repos:
       core: {}
       extra: {}
-      community: {}
   aarch64:
     remote_url: http://mirror.archlinuxarm.org/$arch/$repo
     repos:
       core: {}
       extra: {}
-      community: {}
       alarm: {}
       aur: {}
   armv7h:
@@ -51,6 +49,5 @@ base_distros:
     repos:
       core: {}
       extra: {}
-      community: {}
       alarm: {}
       aur: {}

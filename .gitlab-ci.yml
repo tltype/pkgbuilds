@@ -29,6 +29,7 @@ default:
     - for dir in /pkgbuilds /prebuilts; do mkdir -p "$dir" && mount --bind /kupfer"$dir" "$dir"; done
     - mount --rbind /kupfer /root/.cache/kupfer
     - cd /kupfer
+    - kupferbootstrap version check --ci || true
     - kupferbootstrap config init -N
   artifacts: &logartifacts
     name: logs

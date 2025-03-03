@@ -1,3 +1,5 @@
+kbs_ci_version: "v0.2.0-rc4"
+kbs_min_version: "v0.2.0-rc4"
 remote_url: https://gitlab.com/kupfer/packages/prebuilts/-/raw/%kupfer_branch%/$arch/$repo
 repos:
   kupfer_local:

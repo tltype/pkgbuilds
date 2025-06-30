@@ -6,25 +6,25 @@ pkgname=(
     device-sdm845-xiaomi-beryllium-ebbg
     device-sdm845-xiaomi-beryllium-tianma
 )
-pkgver=0.6
+pkgver=0.7
 pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(MIT)
 makedepends=(devicepkg-helpers)
-_commit=1eb794e1242a39a0b6db877d63d48caa20a02449
+_commit=9550de18ec3b9ac2549a5aed196e705acf240afe
 _commit_conf=2decd7eb54475fed90a6d55be9d1885642a26ecb #deviceinfo commit has different incompatible version
 source=(
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/deviceinfo"
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit_conf}/device/community/device-xiaomi-beryllium/q6voiced.conf"
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/81-libssc-xiaomi-beryllium.rules"
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/hexagonrpcd.confd"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/deviceinfo"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit_conf}/device/community/device-xiaomi-beryllium/q6voiced.conf"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/81-libssc-xiaomi-beryllium.rules"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-beryllium/hexagonrpcd.confd"
     xiaomi-beryllium.conf
     machine-info
     rootston.ini
 )
 sha256sums=(
-    a00aaeb1798d8748337dfbc88eab99ab32253088693d23298deac57da5ffe3d5
+    2210b5cace07eb52974e9f32a3673adbcb0905a9c826e483f4fea6f12fb4bb61
     21b8395e7729c785c0446be5d88e52873b0fa46812111b91bcd5c3af7dde24da
     cd8207ad1532669306f403cad22c5730e64f3a2a70d58e089225527acce059e2
     9f3dc4f9e14e49be1e54e2ae4c0ee498b50ab38569d9d0781d610da7eef84cf6

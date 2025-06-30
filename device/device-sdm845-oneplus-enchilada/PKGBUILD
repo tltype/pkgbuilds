@@ -1,23 +1,23 @@
 _mode=cross
 _nodeps=true
 pkgname=device-sdm845-oneplus-enchilada
-pkgver=0.5
+pkgver=0.6
 pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(MIT)
 depends=(device-sdm845-oneplus-common)
-_commit=1761c761b25475d661a4c4f8397f770bbee33563
+_commit=ba2ec41c9683e4375444433a50841dfa04da94c1
 source=(
     machine-info
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/deviceinfo
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/q6voiced.conf
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/81-libssc-oneplus-enchilada.rules
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/hexagonrpcd.confd
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/deviceinfo
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/q6voiced.conf
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/81-libssc-oneplus-enchilada.rules
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-enchilada/hexagonrpcd.confd
 )
 sha256sums=(
     7729d6a89258b470cadd48cfbc704bab7791501c53f45f50737dea6b441a3171
-    16548df659ef2655a092599b91116b1f575b42b16d174b78bef6bd02c190b782
+    4fabab959a6eb6d998e8c8f3a9ac8359d18a9a370b8882748323b74fb2b3d8ae
     960805dca70f7173c6e8b86e14ccb4297c23924b9c593ecd9cf4c933785f4942
     cd8207ad1532669306f403cad22c5730e64f3a2a70d58e089225527acce059e2
     82703747557e83293ecb185bf7808b0d36d5206f0b78cb5721c183d6e156f74b

@@ -1,4 +1,4 @@
 alsa-ucm-conf/
 90-feedbackd-pmi8998.rules
 call_audio_idle_suspend_workaround.sh
-51-qcom-sdm845.conf
+51-qcom.conf

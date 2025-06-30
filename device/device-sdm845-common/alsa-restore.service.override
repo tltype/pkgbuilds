@@ -1,2 +1,0 @@
-[Service]
-ExecStartPre=/usr/bin/rm -f /var/lib/alsa/asound.state

@@ -1,23 +1,23 @@
 _mode=cross
 _nodeps=true
 pkgname=device-sdm845-oneplus-fajita
-pkgver=0.5
+pkgver=0.6
 pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(MIT)
 depends=(device-sdm845-oneplus-common)
-_commit=9026187fe1248c3524042be73eb2d02970742a97
+_commit=ba2ec41c9683e4375444433a50841dfa04da94c1
 source=(
     machine-info
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/deviceinfo
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/q6voiced.conf
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/81-libssc-oneplus-fajita.rules
-    https://gitlab.com/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/hexagonrpcd.confd
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/deviceinfo
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/q6voiced.conf
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/81-libssc-oneplus-fajita.rules
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-oneplus-fajita/hexagonrpcd.confd
 )
 sha256sums=(
     7729d6a89258b470cadd48cfbc704bab7791501c53f45f50737dea6b441a3171
-    f3171266cbdf64f23578cdceb224fac27cb89b5b53ca652332d7ecfc3f9a48b2
+    ff82c5c0a2cba200fd908164e465acd1a8619ccaaad2b0adf4a5104dd5b53aeb
     960805dca70f7173c6e8b86e14ccb4297c23924b9c593ecd9cf4c933785f4942
     1fca2b33d91cc3021f59bac278190fd944993e2a4479ee1560d6003b3f0ce49f
     11904ee6ceea5b0e7f74068cdbef627277b41a32a8d2642a61f1e9ea79b80784

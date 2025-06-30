@@ -3,7 +3,7 @@ _nodeps=true
 pkgname=device-sdm845-common
 pkgdesc="Common package for Qualcomm SDM845 devices"
 pkgver=0.5
-pkgrel=6
+pkgrel=7
 _arches=specific
 arch=(aarch64)
 license=(MIT)
@@ -23,8 +23,8 @@ depends=(
     bootmac
     hexagonrpcd
 )
-_ucm_commit=aaa7889f7a6de640b4d78300e118457335ad16c0
-_pmos_commit=801283d9f914a895ab2b331102788fc7261994a2
+_ucm_commit=70d89261a7d30273fba9c6e67a072699f9f88151
+_pmos_commit=bd4c139c4dca1ab5b3228adcf270d37b62db7f85
 source=(
     sdm845-common.conf
     sdm845.lst
@@ -32,10 +32,9 @@ source=(
     bootmac-bt.lst
     hexagonrpcd.lst
     callaudio-idle-workaround.service
-    alsa-restore.service.override
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom-sdm845/call_audio_idle_suspend_workaround.sh"
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom-sdm845/90-feedbackd-pmi8998.rules"
-    "https://gitlab.com/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom-sdm845/51-qcom-sdm845.conf"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom/call_audio_idle_suspend_workaround.sh"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom/90-feedbackd-pmi8998.rules"
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_pmos_commit}/device/community/soc-qcom/51-qcom.conf"
     "git+https://gitlab.com/sdm845-mainline/alsa-ucm-conf.git/#commit=$_ucm_commit"
 )
 sha256sums=(
@@ -45,7 +44,6 @@ sha256sums=(
     05bfc075fa627d4cee84275e81100319259f0c414727c868909d3f685ef1eaf3
     3ac7b56ef5c308fb0b4a8f3a39758bad79370dbd9f80b1de88d9655e759f9aed
     2df59440faccce3ce1ff8a2666c08252d2519e7ff9ab9b66c0d7cac9fcc2a5af
-    6a86566df76ba9dd6651353c00a9cdb2c253bbd88b580a6c8acb04b3f97f8c87
     7fb4dc39965f348dd434f49cb0ff7b7df5a873f3586541c090ffe76e1a1703d9
     897f2f5533644668b63e5fbff917e050af1cfb7472553c3ee520388c932ab6f9
     10cd88f61c136272b915ea41e11048e6df2c20543fbaa37902e4f019ea738c1d
@@ -61,13 +59,10 @@ package() {
     install -Dm644 "$srcdir"/callaudio-idle-workaround.service "$pkgdir"/usr/lib/systemd/user/callaudio-idle-workaround.service
     install -Dm644 "$srcdir"/sdm845_callaudio.lst "$pkgdir"/etc/kupfer/systemd/user/sdm845_callaudio.lst
 
-    # temporary alsa-restore workaround for broken audio on sdm845
-    install -Dm644 "$srcdir"/alsa-restore.service.override "$pkgdir"/usr/lib/systemd/system/alsa-restore.service.d/sdm845-fix.conf
-
     # taken from pmos:
     install -Dm755 "$srcdir"/call_audio_idle_suspend_workaround.sh "$pkgdir"/usr/bin/callaudio-idle-workaround
     install -Dm644 "$srcdir"/90-feedbackd-pmi8998.rules "$pkgdir"/usr/lib/udev/rules.d/90-feedbackd-pmi8998.rules
-    install -Dm644 "$srcdir"/51-qcom-sdm845.conf "$pkgdir"/usr/share/wireplumber/wireplumber.conf.d/51-qcom-sdm845.conf
+    install -Dm644 "$srcdir"/51-qcom.conf "$pkgdir"/usr/share/wireplumber/wireplumber.conf.d/51-qcom.conf
 
     # alsa ucm config
     cd "$srcdir"/alsa-ucm-conf

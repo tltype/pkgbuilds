@@ -1,0 +1,25 @@
+post_install() {
+    # Mask alsa services if they are not already masked
+	systemctl mask alsa-restore.service
+	systemctl mask alsa-state.service
+
+    # Remove old ALSA state file if it exists
+    [ -e /var/lib/alsa/asound.state ] && rm /var/lib/alsa/asound.state
+}
+
+post_upgrade() {
+    # Mask alsa services if they are not already masked
+    for svc in alsa-restore.service alsa-state.service; do
+        if ! systemctl is-enabled "$svc" 2>/dev/null | grep -q masked; then
+            systemctl mask "$svc"
+        fi
+    done
+
+    # Remove old ALSA state file if it exists
+    [ -e /var/lib/alsa/asound.state ] && rm /var/lib/alsa/asound.state
+}
+
+# Disable alsa-restore.service as it results in main audio speaker not working:
+# https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/3747
+# No need to use `alsa-restore.service.override` workaround anymore
+# Confirmed on oneplus-enchilada and oneplus-fajita, impact on other sdm845 devices not tested

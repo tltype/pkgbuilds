@@ -2,7 +2,7 @@
 _mode=host
 pkgname=gnome-calls
 pkgdesc="Make and receive PSTN phone calls"
-pkgver=45.0.r0.g936d362
+pkgver=48.2.r0.g9100b84
 pkgrel=1
 _arches=all
 arch=(
@@ -14,25 +14,34 @@ license=(GPL)
 url="https://gitlab.gnome.org/GNOME/calls"
 replaces=(calls)
 depends=(
-    evolution-data-server
-    feedbackd folks gobject-introspection
-    gom
-    gtk3
-    libhandy
-    libpeas
-    modemmanager
     callaudiod
+    dconf
+    evolution-data-server
+    feedbackd
+    folks
+    gcc-libs
+    glib2
+    glibc
+    gom
+    gstreamer
+    gtk4
+    hicolor-icon-theme
+    libadwaita
+    libgee
+    libmm-glib
+    libpeas-2
+    libsecret
     sofia-sip
-    wayland-protocols
 )
 makedepends=(
-    meson
-    ninja
-    vala
+    appstream
     git
+    glib2-devel
+    meson
     python-docutils
+    vala
 )
-_commit="936d36287324163b958c6ea0c4297c7a607ee18c"
+_commit="9100b845a7aad0607b54a8ff67eb5790662f977b"
 source=("git+https://gitlab.gnome.org/GNOME/calls.git#commit=$_commit")
 sha256sums=(SKIP)
 
@@ -42,15 +51,15 @@ pkgver() {
 }
 
 prepare() {
-  cd calls
-  git submodule--helper update --init
+    cd calls
+    git submodule--helper update --init
 }
 
 build() {
-  arch-meson calls output
-  ninja -C output
+    arch-meson calls output
+    ninja -C output
 }
 
 package() {
-  DESTDIR="$pkgdir" ninja -C output install
+    DESTDIR="$pkgdir" ninja -C output install
 }

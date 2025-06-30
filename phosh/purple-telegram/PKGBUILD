@@ -3,7 +3,7 @@
 _mode=host
 pkgname=purple-telegram
 pkgdesc="Purple Telegram plugin"
-pkgver=1.4.7.r0.g7d1d61b
+pkgver=1.4.7.r3.gb08f30c
 pkgrel=1
 _arches=all
 arch=(
@@ -18,9 +18,12 @@ depends=(
     libpurple
     libwebp
 )
-makedepends=(git)
-_commit="7d1d61be591d181295e470b38f508867bbf0efa9" # tags/v1.4.7
-source=($pkgname::git+https://github.com/majn/telegram-purple.git#commit=$_commit)
+makedepends=(
+    git
+    xxd
+)
+_commit="b08f30c801fec10c50c33881fd63545215fa1ec4"
+source=($pkgname::git+$url.git#commit=$_commit)
 sha256sums=(SKIP)
 
 pkgver() {

@@ -1,0 +1,74 @@
+# Maintainer: Jelle van der Waa <jelle@archlinux.org>
+# Adapted for Kupfer Linux: @comradeFreeman
+_mode=host
+pkgname=phoc
+pkgdesc="Display compositor designed for phones"
+pkgver=0.48.0.r0.gebc9de4
+pkgrel=1
+_arches=specific
+arch=(
+    x86_64
+    aarch64
+)
+license=(GPL-3.0-only)
+url="https://gitlab.gnome.org/World/Phosh/phoc"
+depends=(
+    gnome-desktop
+    wlroots0.19
+    gsettings-desktop-schemas
+    pixman
+    libinput
+    libxcb
+    libxkbcommon
+    json-glib
+    glib2
+    dconf
+    cairo
+    wayland
+    libgmobile
+)
+checkdepends=(
+    xorg-server-xvfb
+    xorg-xauth
+    mutter
+    pixman
+)
+makedepends=(
+    cmake
+    meson
+    git
+    wayland-protocols
+    python-jinja
+    python-pygments
+    python-typogrify
+    libgirepository
+    libgmobile
+    glib2-devel
+)
+_commit="ebc9de43496b535de5927f2e24788eb6782cfc45"
+source=(
+    "git+${url}.git#commit=$_commit"
+)
+sha256sums=(SKIP)
+
+pkgver() {
+    cd "$pkgname"
+    git describe --long --abbrev=7 --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+    cd "${pkgname}"
+}
+
+build() {
+    arch-meson "${pkgname}" build -Dembed-wlroots=disabled --wrap-mode=default
+    meson compile -C build
+}
+
+check() {
+    LC_ALL=C.UTF-8 WLR_RENDERER=pixman xvfb-run meson test -C build --print-errorlogs
+}
+
+package() {
+    DESTDIR="${pkgdir}" meson install -C build
+}

@@ -1,0 +1,102 @@
+# Maintainer: Jelle van der Waa <jelle@archlinux.org>
+# Contributor: Thomas Booker <tw.booker@outlook.com>
+# Contributor: Philip Goto <philip.goto@gmail.com>
+# Adapted for Kupfer Linux: @comradeFreeman
+_mode=host
+pkgname=phosh
+pkgdesc="A pure Wayland shell prototype for GNOME on mobile devices"
+pkgver=0.48.0.r0.g34dbd11
+pkgrel=1
+_arches=specific
+arch=(
+    x86_64
+    aarch64
+)
+license=(GPL3)
+url="https://gitlab.gnome.org/World/Phosh/phosh"
+depends=(
+    gtk3
+    libhandy
+    gnome-desktop
+    gnome-session
+    upower
+    libpulse
+    gcr
+    libnm
+    phoc
+    gnome-shell
+    callaudiod
+    evince
+    fribidi
+    wayland
+    evolution-data-server
+    libsecret
+    polkit
+    libadwaita
+    libical
+    libedataserverui4
+    squeekboard
+    libgmobile
+    gnome-bluetooth-3.0
+)
+makedepends=(
+    meson
+    git
+    wayland-protocols
+    python-docutils
+    python-packaging
+    feedbackd
+    libgmobile
+    glib2-devel
+)
+checkdepends=(
+    xorg-server-xvfb
+    xorg-xauth
+)
+optdepends=(
+    "iio-sensor-proxy: accelerometer and other sensors"
+    "feedbackd: haptic/visual/audio feedback"
+    "xdg-desktop-portal-gtk: for screenshot support"
+    "xdg-desktop-portal-wlr: for screencasts support"
+)
+_commit="34dbd11bbe0d64c526814c502ef533fead1ac9a9"
+source=(
+    "git+${url}.git#commit=$_commit"
+    pam_phosh
+)
+sha256sums=(
+    SKIP
+    "b7793f80c533e84ad8adfe8bb46c69f107575e724aa9b53b41f370baa37e4fd5"
+)
+
+pkgver() {
+    cd "$pkgname"
+    git describe --long --abbrev=7 --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+    cd "$pkgname"
+    # Run meson once to setup the git submodule for libcall-ui as it should not be packaged
+    meson setup -D gtk_doc=false prep
+}
+
+build() {
+    arch-meson --libexecdir=/usr/lib/phosh  \
+      -D tests=true -D phoc_tests=disabled \
+      -D man=true -D gtk_doc=false -D callui-i18n=true \
+      -D lockscreen-plugins=true phosh build
+    meson compile -C build
+}
+
+check() {
+    xvfb-run meson test --no-suite screenshots -C build
+}
+
+package() {
+    DESTDIR="${pkgdir}" meson install -C build
+    # make squeekboard the default keyboard
+    mkdir -p "$pkgdir"/usr/share/applications
+    ln -s sm.puri.Squeekboard.desktop "$pkgdir"/usr/share/applications/sm.puri.OSK0.desktop
+
+    install -Dm644 "$srcdir"/pam_phosh "$pkgdir"/etc/pam.d/phosh
+}

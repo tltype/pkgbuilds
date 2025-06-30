@@ -4,7 +4,7 @@
 _mode=host
 pkgname=mmsd-tng
 pkgdesc="Multimedia Messaging Service Daemon - The Next Generation"
-pkgver=2.6.0.r1.gd58367e
+pkgver=2.6.4.r0.gf860df5
 pkgrel=1
 _arches=all
 arch=(
@@ -28,9 +28,9 @@ makedepends=(
     git
     meson
 )
-_commit=d58367e7c5b1d41e9c60dc46a9f032090b43443f
+_commit="f860df588bcf0e4c0ed06f5bca848bf5624ec292"
 source=(
-    "git+https://gitlab.com/kop316/mmsd.git#commit=${_commit}"
+    "git+$url.git#commit=${_commit}"
     mmsd-tng.service
 )
 sha256sums=(
@@ -44,6 +44,7 @@ pkgver() {
 }
 
 build() {
+    export CXXFLAGS+=" -D_GTHREAD_USE_COND_INIT_FUNC"
     arch-meson mmsd _build
     meson compile -C _build
 }

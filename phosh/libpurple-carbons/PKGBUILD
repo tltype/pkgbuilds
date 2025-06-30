@@ -20,7 +20,7 @@ depends=(
     glib2
 )
 _commit=2fa542db43631bfef8638d686b3361539ee818e2
-source=("git+https://github.com/gkdr/carbons.git#commit=${_commit}")
+source=("git+$url.git#commit=${_commit}")
 sha256sums=(SKIP)
 
 pkgver() {

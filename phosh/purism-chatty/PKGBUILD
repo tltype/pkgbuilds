@@ -3,7 +3,7 @@
 _mode=host
 pkgname=purism-chatty
 pkgdesc="SMS/MMS, Matrix and (optionally) XMPP messaging app"
-pkgver=0.8.1.r0.gd02161d
+pkgver=0.8.8.r3.gcb28ceb
 pkgrel=1
 _arches=all
 arch=(
@@ -14,17 +14,33 @@ arch=(
 license=(GPL)
 url=https://gitlab.gnome.org/World/Chatty
 depends=(
+    cairo
+    dconf
     evolution-data-server
     feedbackd
+    gcc-libs
+    gdk-pixbuf2
+    glib2
+    glibc
     gnome-desktop-4
+    gstreamer
     gtk4
+    gtksourceview5
+    hicolor-icon-theme
     libadwaita
+    libcmatrix
     libmm-glib
     libolm
+    libphonenumber
     libpurple
+    libspelling
+    pango
+    sqlite
 )
 makedepends=(
+    appstream
     git
+    glib2-devel
     itstool
     meson
     ninja
@@ -39,8 +55,8 @@ optdepends=(
     "mmsd-tng: MMS support"
     "purple-telegram: Telegram chat protocol support"
 )
-_commit=d02161d47820070fe2911597f49fae4d0075aebd # tags/v0.8.1
-source=("git+https://gitlab.gnome.org/World/Chatty.git#commit=${_commit}")
+_commit="cb28cebfb4c047809acb1930f98e8bd5e01e1e91"
+source=("git+$url.git#commit=${_commit}")
 sha256sums=(SKIP)
 
 pkgver() {
@@ -54,6 +70,7 @@ prepare() {
 }
 
 build() {
+    export CXXFLAGS+=" -D_GTHREAD_USE_COND_INIT_FUNC"
     arch-meson Chatty output
     ninja -C output
 }

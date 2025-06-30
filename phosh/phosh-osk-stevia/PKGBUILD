@@ -1,7 +1,7 @@
 _mode=host
-pkgname=phosh-osk-stub
+pkgname=phosh-osk-stevia
 pkgdesc="Stub for debugging OSK / input related issues with phosh"
-pkgver=0.34.0.r0.gf7bfecf
+pkgver=0.48.0.r0.gc2ece5f
 pkgrel=1
 _arches=all
 arch=(
@@ -9,22 +9,24 @@ arch=(
     aarch64
 )
 license=(GPL3+)
-url=https://gitlab.gnome.org/guidog/phosh-osk-stub
+url=https://gitlab.gnome.org/guidog/stevia
 provides=(phosh-osk)
-conflicts=(phosh-osk)
+conflicts=(phosh-osk-stub)
+replaces=(phosh-osk-stub)
 depends=(
     feedbackd
     phoc
     libhandy
     presage
     wayland-protocols
+    glib2-devel
 )
 makedepends=(
     meson
     ninja
     glib2-devel
 )
-_commit=f7bfecf5637efd9d62710360fc773e0704cca52c
+_commit="c2ece5f82604554dc4e203749709f436c17d3567"
 source=(
     "git+$url#commit=$_commit"
 )
@@ -33,12 +35,12 @@ sha256sums=(
 )
 
 pkgver() {
-    cd "$pkgname"
+    cd stevia
     git describe --long --tags --abbrev=7 "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-    arch-meson ${pkgname} _build
+    arch-meson stevia _build
     # fixme: too high a -j breaks the build
     ninja -j3 -C _build
 }
@@ -48,8 +50,8 @@ package() {
 
     rm "$pkgdir"/usr/share/applications/sm.puri.OSK0.desktop  # conflicts with phosh
 
-    install -Dm755 _build/src/phosh-osk-stub \
-         "$pkgdir"/usr/bin/phosh-osk-stub
+    install -Dm755 _build/src/phosh-osk-stevia \
+         "$pkgdir"/usr/bin/phosh-osk-stevia
 
     # presage completion db
     install -dm755 "$pkgdir"/usr/share/phosh/osk

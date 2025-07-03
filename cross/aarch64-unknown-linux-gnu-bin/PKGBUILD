@@ -1,7 +1,7 @@
 _mode=cross
 pkgname=aarch64-unknown-linux-gnu-bin
 pkgdesc="aarch64 crosscompiler binaries from ArchlinuxARM"
-pkgver=11.2.0
+pkgver=14.1.1
 pkgrel=1
 _arches=specific
 arch=(x86_64)
@@ -20,7 +20,7 @@ provides=(
 )
 source=("https://archlinuxarm.org/builder/xtools/$pkgver/x-tools8.tar.xz")
 sha256sums=(
-    eb94abd01421b90d3756490b37135d25efbf0bf556d8fa6391111106a68c50e6
+    bfe70b9e1acf687e83a1610f8c3f6631356c7c7da21e3b7f824aaf8e616f6a7d
 )
 noextract=(
     x-tools8.tar.xz

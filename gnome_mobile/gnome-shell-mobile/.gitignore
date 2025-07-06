@@ -1,2 +1,2 @@
-mobile-shell/
-libgnome-volume-control/
+gnome-shell-mobile/
+*.patch

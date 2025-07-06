@@ -4,14 +4,14 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 # Contributor: Flamelab <panosfilip@gmail.com>
 _mode=host
-_crossdirect=false
+_crossdirect=true
 pkgbase=gnome-shell-mobile
 pkgname=(
     gnome-shell-mobile
     gnome-shell-mobile-docs
 )
 pkgdesc="Next generation desktop shell"
-pkgver=46.r0.g361fc60
+pkgver=48.r0.gcf9bd6b
 pkgrel=1
 _arches=all
 arch=(
@@ -65,7 +65,6 @@ depends=(
     unzip
     upower
     webkitgtk-6.0
-    pixman-kupfer
 )
 makedepends=(
     asciidoc
@@ -78,26 +77,33 @@ makedepends=(
     gobject-introspection
     meson
     sassc
+    python-argcomplete
+    python-docutils # for rst2man
 )
-_commit=361fc605e595b36df68d8b691f22bccddcf84cc9 # tags^46-mobile-0
-_gvc_commit=5f9768a2eac29c1ed56f1fbb449a77a3523683b6
+_commit=cf9bd6b53932335bbbf413b6d2db7ae74e9e7688 # tags^48.mobile.0
+_pcver_commit=74be50469ec5151e1bdcdcafd11a9d10e6c4e280
 source=(
     "git+https://gitlab.gnome.org/verdre/gnome-shell-mobile.git#commit=$_commit"
-    "git+https://gitlab.gnome.org/GNOME/libgnome-volume-control.git#commit=$_gvc_commit"
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/$_pcver_commit/temp/gnome-shell-mobile/pcver.patch
 )
 sha256sums=(
-    ffb02d21b9be34d83f327634be44b72f0e631358ad93643802f983f44c12e7dd
-    587319b45ff7d989635aed0c3bd9ef834d6e53ae46788cb6ba083d42d7e63855
+    4e2b42451f69ec214b4d6fec8ac8d872f1bf41b1c439a6095bc60914195f1de3
+    4f8329f76ae67d43c20fa771ed833c85cbfd2b6c9ecebe441ef9423a06ccaa1f
 )
 
 pkgver() {
     cd $pkgbase
-    git describe --long --tags --abbrev=7 "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g; s/.mobile.0//'
+    git describe --long --tags --abbrev=7 "$_commit" | sed -E 's/^([0-9]+)\.mobile\.[0-9]+-([0-9]+)-g([0-9a-f]+)/\1.r\2.g\3/'
 }
 
 prepare() {
+    cd $pkgbase
+
     # Inject gvc
-    ln -s libgnome-volume-control gvc
+    export MESON_PACKAGE_CACHE_DIR="$srcdir"
+    meson subprojects download gvc
+
+    git apply -3 ../pcver.patch
 }
 
 build() {
@@ -109,9 +115,6 @@ build() {
     CFLAGS="${CFLAGS/-O2/-O3} -fno-semantic-interposition"
     LDFLAGS+=" -Wl,-Bsymbolic-functions"
 
-    # Inject gvc
-    export MESON_PACKAGE_CACHE_DIR="$srcdir"
-
     arch-meson $pkgbase build "${meson_options[@]}"
     meson compile -C build
 }
@@ -119,7 +122,7 @@ build() {
 package_gnome-shell-mobile() {
     conflicts=(gnome-shell)
     provides=(gnome-shell=$pkgver)
-    depends+=(libmutter-14.so)
+    depends+=(libmutter-16.so)
     optdepends=(
       'evolution-data-server: Evolution calendar integration'
       'gnome-bluetooth-3.0: Bluetooth support'

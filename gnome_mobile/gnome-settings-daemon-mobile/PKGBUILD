@@ -5,7 +5,7 @@ _mode=host
 _crossdirect=false
 pkgname=gnome-settings-daemon-mobile
 pkgdesc="GNOME Settings Daemon"
-pkgver=46.r0.gee5d1b2
+pkgver=48.r0.g7dbef7e
 pkgrel=1
 _arches=all
 arch=(
@@ -75,20 +75,23 @@ checkdepends=(
 optdepends=("usbguard: USB protection support")
 #groups=(gnome)
 backup=(etc/xdg/Xwayland-session.d/00-xrdb)
-_commit=ee5d1b246da9ac5bdd635e3d5afb322ecacc3912 # 46-mobile-0
+_commit=7dbef7eb2f73b6d838c37bcc1354ae1f629943d8 # tags^48.mobile.0
 _gvc_commit=91f3f41490666a526ed78af744507d7ee1134323
+_pcver_commit=483ab43906a21807d7de31e53f50d868c8de064f
 source=(
     "git+https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile.git#commit=$_commit"
     "git+https://gitlab.gnome.org/GNOME/libgnome-volume-control.git#commit=$_gvc_commit"
+    https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/$_pcver_commit/temp/gnome-settings-daemon-mobile/pcver.patch
 )
 sha256sums=(
-    e36313bb07782697b14570beb78b2afaf1823986db2548b341dd99c5aff03379
+    c204a2037b74c3233ddaa140f917dd65925c7bb71f5532d672081fcc779f85f6
     20fed6dd94d34e48fce65f5cb3e83af898d9a4938640074d379e9dcc52643490
+    26ab43890ebf19e51a40f83c67d0c8f1c26d973ad055d81c4a5971c176837e21
 )
 
 pkgver() {
     cd $pkgname
-    git describe --long --tags --abbrev=7 "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g; s/.mobile.0//'
+    git describe --long --tags --abbrev=7 "$_commit" | sed -E 's/^([0-9]+)\.mobile\.[0-9]+-([0-9]+)-g([0-9a-f]+)/\1.r\2.g\3/'
 }
 
 prepare() {
@@ -97,6 +100,8 @@ prepare() {
     git submodule init
     git submodule set-url subprojects/gvc "$srcdir/libgnome-volume-control"
     git -c protocol.file.allow=always -c protocol.allow=never submodule update
+
+    git apply -3 ../pcver.patch
 }
 
 build() {

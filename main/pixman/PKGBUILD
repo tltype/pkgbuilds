@@ -9,7 +9,7 @@
 _mode=host
 pkgname=pixman-kupfer
 pkgdesc="The pixel-manipulation library for X and cairo"
-pkgver=0.42.2
+pkgver=0.46.2
 pkgrel=1
 _arches=specific
 arch=(
@@ -32,7 +32,7 @@ source=(
     https://xorg.freedesktop.org/releases/individual/lib/pixman-${pkgver}.tar.xz
 )
 sha256sums=(
-    5747d2ec498ad0f1594878cc897ef5eb6c29e91c53b899f7f71b506785fc1376
+    d075209d18728b1ca5d0bb864aa047a262a1fde206da8a677d6af75b2ee1ae98
 )
 
 #validpgpkeys=('') # Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
@@ -45,7 +45,7 @@ build() {
     -D arm-simd=disabled \
     -D neon=disabled \
     -D a64-neon=enabled \
-    -D iwmmxt=disabled \
+    -D rvv=disabled \
     -D mmx=disabled \
     -D sse2=disabled \
     -D ssse3=disabled \
@@ -55,8 +55,7 @@ build() {
 }
 
 check() {
-  #  meson test -C build
-  true
+  meson test -C build
 }
 
 package() {

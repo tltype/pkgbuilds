@@ -2,7 +2,7 @@ _mode=cross
 _pkgbase=linux-firmware
 pkgbase=firmware-linux
 pkgdesc="Firmware files for Linux"
-pkgver=20241110
+pkgver=20250708
 pkgrel=1
 _arches=specific
 arch=(any)
@@ -16,7 +16,7 @@ provides=(linux-firmware)
 makedepends=(git)
 options=(!strip)
 source=("https://gitlab.com/kernel-firmware/linux-firmware/-/archive/${pkgver}/linux-firmware-${pkgver}.tar.gz")
-sha256sums=(c8a561dfdbd54157692fe166b84a173f9bc01f89c78f6196863beea2450e4938)
+sha256sums=(bc9a2ff1223e2e1ae896816c2b7cab2f5029a6d59600e1daf032a876e6d2ce18)
 
 _dir="linux-firmware-${pkgver}"
 _folders="qcom qca ath10k"

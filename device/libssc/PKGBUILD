@@ -3,7 +3,7 @@ _mode=host
 _crossdirect=false
 pkgname=libssc
 pkgdesc="Library to expose Qualcomm Sensor Core sensors"
-pkgver=0.1.6.r0.gde7f29c
+pkgver=0.2.2.r0.g8c706d4
 pkgrel=1
 _arches=all
 arch=(
@@ -20,13 +20,18 @@ depends=(
     protobuf-c
 )
 makedepends=(
+    git
     linux-headers
     meson
-    git
+    protobuf
+    qrtr-git
+    python
+    python-gobject
+    python-protobuf
 )
-_commit=de7f29cc2c4858b553d69cab2e6a58d58197388d #tag 0.1.6
+_commit=8c706d4805bf5b69245aaa483b27844385fe3df3 #tag 0.2.2
 source=("git+https://codeberg.org/DylanVanAssche/libssc.git#commit=$_commit")
-sha256sums=(a74865be049f36c523a890b09a6d171c2ce460abb23031024580dfcb73149e1b)
+sha256sums=(3258ebf28f723c0f87c4a641ab513ed88ec037c827b7d20e040bb5144d2d15b3)
 
 pkgver() {
     cd libssc

@@ -8,7 +8,7 @@ _mode=host
 _crossdirect=false
 pkgname=iio-sensor-proxy
 pkgdesc="IIO accelerometer sensor to input device proxy"
-pkgver=3.5.r10.gfe56bdb
+pkgver=3.7.r0.gbfcf0c8
 pkgrel=1
 _arches=all
 arch=(
@@ -21,20 +21,22 @@ url=https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/
 depends=(
     systemd
     libgudev
-    gtk3
+    glib2
     polkit
-    libssc
-    pixman-kupfer
+    "libssc>=0.2.1"
 )
-makedepends=(meson)
+makedepends=(
+    gtk3
+    meson
+)
 checkdepends=(
     python-gobject
     python-dbusmock
     python-psutil
     umockdev
 )
-_commit=fe56bdba1243cc5f6a652eb75d11ae1d1957ff7e
-_libssc_commit=372ccb3cf248c5486ccee958e2250b7169658700
+_commit=bfcf0c867bbba90ef26138c99da5780a76d9b99b
+_libssc_commit=af17d8f3a7572ed2be40d5a28c6ce08c74bd36c7
 source=(
     "git+https://gitlab.freedesktop.org/hadess/iio-sensor-proxy.git#commit=$_commit"
     https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0001-iio-sensor-proxy-depend-on-libssc.patch
@@ -43,21 +45,23 @@ source=(
     https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0004-accelerometer-support-SSC-accelerometer-sensor.patch
     https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0005-compass-support-SSC-compass-sensor.patch
     https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0006-data-add-libssc-udev-rules.patch
-    https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0007-CI-add-libssc-build.patch
-    https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0008-data-iio-sensor-proxy.service.in-add-AF_QIPCRTR.patch
-    iio-sensor-proxy.service.delay
+    https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0007-data-iio-sensor-proxy.service.in-add-AF_QIPCRTR.patch
+    https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0008-drv-ssc-implement-set_polling.patch
+    https://gitlab.com/postmarketOS/pmaports/-/raw/$_libssc_commit/temp/iio-sensor-proxy/0009-tests-integration-test-add-SSC-sensors.patch
+    system-iio-sensor-proxy.service.d-hexagonrpcd.conf
 )
 sha256sums=(
-    a2d6f58407ca6ea73687b00141afd3cf4969fa7ab5f1b1ac91f1cc5c33850e8e
-    49be6d03efee6a3468250c30c4884d9fedb32dbff69116e2b798b58b0b1997c8
-    bff2b9883eaf2d12cfbae9b947bb575940d82c48ad9a8b637230691f27842e5b
-    fc902e19b8b57863a16b25791e1595fd00ce33441e7d096bd4e4f50a598352a7
-    736b198e9f95a2befff20e2c750f7c6855903ac211b53f3710cc5cbd20e2279c
-    473d60f82b388209c065ecd3f34216d36839d43e6a91f60b3d15870cd9cd9b6e
-    892774352c1ecdca3b3f277930e4920cb0533eaef4a02d75a715cdc015110969
-    33bb3ccfd75cf5984036d66f3f29f59292760ab3a7c34e5c9e6679895b108d0c
-    6cf4bec1fcceb6c20843f66b790bee45f359c0fc8344b355e78e6d996e6c10c0
-    cf90abf92bf02f08767a5f386c983b44bfd4acc5868b0c58e89c1d6ac81eacbe
+    63c9e3bfe0e166f773c79e09f18954bf047d90b7b724fcb7beb2a26dc8bcd29b
+    94e00783cd3eb66bc69f36056817952335746b9b14e8482b1ea293e211ee0976
+    3d47e8089afaa34785216c6459c5260b5800e9c7f92a4eaf3e249bb6e3ad6ec9
+    b77aa1f175595361bfc1f32bfd72e0946824feaa4e443a95e5db1f6cf61e9f4b
+    e36caeb437ddfe9493eb08d9a4785970b5aabc1e1e3d23cff475d739a19efeaf
+    59e4e6e21a82a52d90af4136454908792094e07ed22f1507c3157706eacead60
+    de802c803f86c137178d575ba52e90cf7332c91ddff2d53c223c2dca8d55b52b
+    844513017177ae558c3b409f6bd1f639f7d1c88d8cbbe2b9fc09f81f4f23003f
+    39d010db54f51de6778bf3f4fa001c2ae2a08736e8f1c5e565b2d7aa0f45d010
+    cb283672832d03a535a44f203e01ec147605daefab1cc229ad70bc55952ef8ee
+    5e56ebe9e07a5167c9489c54887432e095cd08408fe11cb3de06a40e034240c5
 )
 
 pkgver() {
@@ -96,5 +100,5 @@ package() {
 
     DESTDIR="$pkgdir" ninja install
 
-    install -Dm644 "$srcdir"/iio-sensor-proxy.service.delay "$pkgdir"/usr/lib/systemd/system/iio-sensor-proxy.service.d/delay-start.conf
+    install -Dm644 "$srcdir"/system-iio-sensor-proxy.service.d-hexagonrpcd.conf "$pkgdir"/usr/lib/systemd/system/iio-sensor-proxy.service.d/hexagonrpcd.conf
 }

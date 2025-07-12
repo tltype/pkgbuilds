@@ -1,0 +1,55 @@
+# Maintainer: Devin Lin <devin@kde.org>
+# Adapted for Kupfer Linux: @comradeFreeman
+_mode=host
+_crossdirect=false
+pkgname=plasma-nano
+pkgdesc="A minimal plasma shell package intended for embedded devices."
+pkgver=6.4.2.r0.ga6fdcba
+pkgrel=1
+_arches=specific
+arch=(
+    x86_64
+    i686
+    i486
+    pentium4
+    arm
+    armv6h
+    armv7h
+    aarch64
+)
+license=("GPL2")
+url="https://invent.kde.org/plasma/plasma-nano"
+depends=(
+    plasma-workspace
+    kwindowsystem
+    ki18n
+    kservice
+    kitemmodels
+    qt6-svg
+)
+makedepends=(
+    cmake
+    extra-cmake-modules
+)
+_commit=a6fdcba9c2ec2982e88fae33f3b92b232b03b63b
+source=("git+$url.git#commit=$_commit")
+sha256sums=(SKIP)
+
+pkgver() {
+    cd "$pkgname"
+    git describe --long --abbrev=7  --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  cmake -B build -S "${pkgname}" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DBUILD_TESTING=OFF \
+    -DLIB_INSTALL_DIR=lib \
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
+    -DCMAKE_BUILD_TYPE=Release
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

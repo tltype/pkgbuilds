@@ -4,10 +4,11 @@
 # Contributor: Bhushan Shah <bhush94 at gmail dot com>
 # Contributor: Devin Lin <devin@kde.org>
 _mode=host
+_crossdirect=false
 pkgname=spacebar
 pkgdesc="SMS and messaging application for Mobile Devices running Plasma"
-pkgver=23.01.0.r0.gab18e7e
-pkgrel=2
+pkgver=6.4.2.r0.gc71736b
+pkgrel=1
 _arches=all
 arch=(
     x86_64
@@ -16,26 +17,29 @@ arch=(
 )
 license=(GPL-3.0-or-later)
 depends=(
-    kcontacts5
-    knotifications5
-    kirigami2
-    kirigami-addons5
-    kpeople5
-    ki18n5
-    qt5-quickcontrols2
-    modemmanager-qt5
-    telepathy-qt
-    libphonenumber
-    kdbusaddons5
-    kio5
     c-ares
+    futuresql-qt6
+    kconfig
+    kcoreaddons
+    kcontacts
+    kdbusaddons
+    ki18n
+    kio
+    kirigami
+    kirigami-addons
+    knotifications
+    kpeople
+    kwindowsystem
+    libphonenumber
+    modemmanager-qt
+    qcoro-qt6
+    qt6-declarative
 )
 makedepends=(
     cmake
     extra-cmake-modules
-    qcoro-qt5
 )
-_commit=ab18e7e36eefe3c9c3be37e5be2b4d1e08b2cbb6
+_commit=c71736be6252ba181c512c5f70f028ee9fcaed09
 source=(
     "git+https://invent.kde.org/plasma-mobile/spacebar.git#commit=$_commit"
 )

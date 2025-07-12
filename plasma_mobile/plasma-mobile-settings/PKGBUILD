@@ -5,7 +5,7 @@ _mode=host
 pkgname=plasma-mobile-settings
 pkgdesc="Settings files for Plasma Mobile"
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 _arches=all
 arch=(
     x86_64
@@ -32,7 +32,7 @@ source=(
     plasmamobile.json
     powerdevil.hook
     kde-tweaks.sh
-    hfd-service.txt
+    99-flashlight.rules
 )
 sha256sums=(
     4ca8472c70b1b7ad32bca4e68b47be84eeedbc2f53a91de16fbccb2cffc3fa1d
@@ -43,7 +43,7 @@ sha256sums=(
     42db6e099ab56aa4f6c01107fe83897a059bc371a389379cd3c260d4ab8fd2bc
     42c4de4c9310904ada1c84e23a34e42fcf20f8318a5f798372468381965dbd18
     a20bf47c2a3a5d22029f953933079a2b8c0948e2c687e32f084d6964309ae113
-    a96e50dfe3cc8e9736b98e2f6b2d92a0987e4dfa8069db00947237e78472e4de
+    7bba5fb62d6fe3bc526f8e3661e83f2bf09bd4dd3da7f2ace4af08a63640393c
 )
 
 package() {
@@ -59,6 +59,6 @@ package() {
 
     install -Dm755 "${srcdir}/kde-tweaks.sh" "${pkgdir}/etc/profile.d/kde-tweaks.sh"
 
-    # Enable hfd-service for vibrations
-    install -Dm644 "$srcdir"/hfd-service.txt "$pkgdir"/etc/kupfer/systemd/hfd-service.txt
+    # Allow everyone to set brightness of flashlight (Required for plasma-mobile flashlightplugin)
+    install -Dm644 "$srcdir"/99-flashlight.rules -t "$pkgdir"/usr/lib/udev/rules.d/
 }

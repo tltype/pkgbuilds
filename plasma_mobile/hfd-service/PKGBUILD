@@ -1,8 +1,9 @@
 # Maintainer: Danct12 <danct12@disroot.org>
 _mode=host
+_crossdirect=false
 pkgname=hfd-service
 pkgdesc="Service that manages human feedback devices on mobile devices"
-pkgver=0.1.0.r0.gd7a36de
+pkgver=0.2.3.r0.g98028b7
 pkgrel=1
 _arches=all
 arch=(
@@ -12,23 +13,24 @@ arch=(
 )
 license=(LGPL3)
 depends=(
+    accountsservice
     qt5-base
     qt5-feedback
+    lomiri-deviceinfo
+    yaml-cpp
 )
 makedepends=(
     cmake
-    cmake-extras
+    "cmake-extras>=1.8"
 )
-_commit=d7a36de882b3f8818d485b0ec94f3fa5fe1152dd
+_commit=98028b740721dc8697602a3e6b0d6facf92f47f5
 source=(
     "git+https://gitlab.com/ubports/development/core/hfd-service.git#commit=$_commit"
     plugin_install_dir.patch
-    hfd-service.service
 )
 sha256sums=(
     SKIP
     e51fb9959bbd2141b7fe70e2398d36bb572212f71bb9969f45ba0af915697315
-    7d402149c021e3aed564bcc6f5e34fa2b63b1d302f48e54f552ab1afa215ab66
 )
 
 pkgver() {
@@ -46,13 +48,11 @@ build() {
         -DCMAKE_BUILD_TYPE=None \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_INSTALL_LIBEXECDIR=bin \
         -DENABLE_LIBHYBRIS=OFF
     cmake --build build
 }
 
 package() {
     DESTDIR="$pkgdir" cmake --install build
-
-    install -Dm644 hfd-service.service $pkgdir/usr/lib/systemd/system/hfd-service.service
-    rm -rv $pkgdir/etc/init
 }

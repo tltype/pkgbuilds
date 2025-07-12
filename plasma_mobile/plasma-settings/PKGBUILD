@@ -1,0 +1,55 @@
+# Maintainer: Devin Lin <devin@kde.org>
+# Adapted for Kupfer Linux: @comradeFreeman
+_mode=host
+_crossdirect=false
+pkgname=plasma-settings
+pkgdesc="Settings application for Plasma Mobile"
+pkgver=25.07.0.r0.ge63400d
+pkgrel=1
+_arches=specific
+arch=(
+    x86_64
+    i686
+    i486
+    pentium4
+    arm
+    armv6h
+    armv7h
+    aarch64
+)
+license=("GPL3")
+url="https://invent.kde.org/plasma-mobile/plasma-settings"
+depends=(
+    kcmutils
+    plasma-workspace
+    kdeclarative
+    ki18n
+    kirigami-addons
+    kitemviews
+    kservice
+    kitemmodels
+)
+makedepends=(
+    cmake
+    extra-cmake-modules
+)
+_commit=e63400ddffa936a77132b746a6792618f788ea76
+source=("git+$url.git#commit=$_commit")
+sha256sums=(SKIP)
+
+pkgver() {
+    cd "$pkgname"
+    git describe --long --abbrev=7 --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+    cmake -B build -S "${pkgname}" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_LIBDIR=/usr/lib
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}

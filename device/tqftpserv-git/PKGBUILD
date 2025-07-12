@@ -1,34 +1,37 @@
 _mode=host
+_crossdirect=false
 _pkgname=tqftpserv
 pkgname="$_pkgname-git"
 pkgdesc="Trivial File Transfer Protocol server over AF_QIPCRTR"
-pkgver=r12.783425b
-pkgrel=2
+pkgver=1.0.r37.g9fc5fdc
+pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(BSD-3-Clause)
-url="https://github.com/andersson/$_pkgname"
+url="https://github.com/linux-msm/$_pkgname"
 provides=("$_pkgname")
-depends=(qrtr-git)
-_commit=783425b550de2a359db6aa3b41577c3fbaae5903
+makedepends=(
+    git
+    meson
+    "qrtr-git>=1.1"
+    zstd
+)
+_commit=9fc5fdc53b5bc3e8ffc0b8f285443e8d1917c5cb
 source=("git+$url#commit=$_commit")
 sha256sums=(SKIP)
 
 pkgver() {
     cd "$_pkgname"
-
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+    git describe --long --abbrev=7  --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-    cd "$_pkgname"
-
-    make prefix=/usr
+    arch-meson $_pkgname build
+    meson compile -C build
 }
 
 package() {
-    cd "$_pkgname"
+    meson install -C build --destdir "$pkgdir"
 
-    make prefix=/usr DESTDIR="$pkgdir/" install
-    install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$_pkgname/COPYING
+    install -Dm644 "$_pkgname"/LICENSE "$pkgdir"/usr/share/licenses/$_pkgname/COPYING
 }

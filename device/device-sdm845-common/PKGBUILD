@@ -3,7 +3,7 @@ _nodeps=true
 pkgname=device-sdm845-common
 pkgdesc="Common package for Qualcomm SDM845 devices"
 pkgver=0.5
-pkgrel=7
+pkgrel=8
 _arches=specific
 arch=(aarch64)
 license=(MIT)
@@ -41,7 +41,7 @@ sha256sums=(
     557bde976b39d767305b870f0de1f5572bda953afc7d8ea153bf4b6cd2ae913d
     b6834f1eb597cf5846ce730f52d3b24b4b3eaca66388d2b8611d1ca5e37dbdf5
     1ae2de281a337ba5c135368f3a68e414cd459affe04432706338cda7a84f1044
-    05bfc075fa627d4cee84275e81100319259f0c414727c868909d3f685ef1eaf3
+    8b9dd32c65dfe055daf42049e16ff442e4a5314c12d2ec0b684e9958b09aca87
     3ac7b56ef5c308fb0b4a8f3a39758bad79370dbd9f80b1de88d9655e759f9aed
     2df59440faccce3ce1ff8a2666c08252d2519e7ff9ab9b66c0d7cac9fcc2a5af
     7fb4dc39965f348dd434f49cb0ff7b7df5a873f3586541c090ffe76e1a1703d9

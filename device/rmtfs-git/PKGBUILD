@@ -1,19 +1,20 @@
 _mode=host
+_crossdirect=false
 _pkgname=rmtfs
 pkgname="$_pkgname-git"
 pkgdesc="Qualcomm Remote Filesystem Service Implementation"
-pkgver=r58.695d066
+pkgver=1.1.1.r2.g586372e
 pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(BSD-3-Clause)
-url="https://github.com/andersson/$_pkgname"
+url="https://github.com/linux-msm/$_pkgname"
 provides=("$_pkgname")
 depends=(
     qrtr-git
     udev
 )
-_commit=695d0668ffa6e2a4bf6e676f3c58a444a5d67690
+_commit=586372e575f5cc1a7cbb170219ab6df98f394cae
 source=(
     "git+$url#commit=$_commit"
     udev.rules
@@ -25,8 +26,7 @@ sha256sums=(
 
 pkgver() {
     cd "$_pkgname"
-
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+    git describe --long --abbrev=7  --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {

@@ -1,35 +1,38 @@
 _mode=host
+_crossdirect=false
 _pkgname="qrtr"
 pkgname="$_pkgname-git"
 pkgdesc="Userspace reference for net/qrtr in the Linux kernel"
-pkgver=r95.d0d471c
+pkgver=1.1.r5.g5923eea
 pkgrel=1
 _arches=specific
 arch=(aarch64)
 license=(BSD-3-Clause)
-url="https://github.com/andersson/$_pkgname"
+url="https://github.com/linux-msm/$_pkgname"
 provides=("$_pkgname")
 depends=(glibc)
-makedepends=(linux-headers)
-_commit=d0d471c96e7d112fac6f48bd11f9e8ce209c04d2
+makedepends=(
+    git
+    meson
+    gcc
+    linux-headers
+)
+_commit=5923eea97377f4a3ed9121b358fd919e3659db7b
 source=("git+$url#commit=$_commit")
 sha256sums=(SKIP)
 
 pkgver() {
     cd "$_pkgname"
-
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+    git describe --long --abbrev=7  --tags "$_commit" | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-    cd "$_pkgname"
-
-    make prefix=/usr all
+    arch-meson $_pkgname build
+    meson compile -C build
 }
 
 package() {
-    cd "$_pkgname"
+    meson install -C build --destdir "$pkgdir"
 
-    make prefix=/usr DESTDIR="$pkgdir/" install
-    install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$_pkgname/COPYING
+    install -Dm644 "$_pkgname"/LICENSE "$pkgdir"/usr/share/licenses/$_pkgname/COPYING
 }

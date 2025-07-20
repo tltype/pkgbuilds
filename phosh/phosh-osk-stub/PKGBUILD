@@ -22,6 +22,7 @@ depends=(
 makedepends=(
     meson
     ninja
+    glib2-devel
 )
 _commit=f7bfecf5637efd9d62710360fc773e0704cca52c
 source=(

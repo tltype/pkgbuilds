@@ -3,7 +3,7 @@ _nodeps=true
 pkgname=meta-gnome-common
 pkgdesc="Common metapackage for the GNOME shell"
 pkgver=1.0
-pkgrel=6
+pkgrel=7
 _arches=all
 arch=(
     x86_64
@@ -58,6 +58,7 @@ depends=(
     lollypop
     loupe
     malcontent
+    mobile-config-firefox
     mutter
     nautilus
     orca

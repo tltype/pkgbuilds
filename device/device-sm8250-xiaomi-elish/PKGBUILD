@@ -1,0 +1,65 @@
+_mode=cross
+_nodeps=true
+pkgbase=device-sm8250-xiaomi-elish
+pkgname=(
+    device-sm8250-xiaomi-elish-common
+    device-sm8250-xiaomi-elish-boe
+    device-sm8250-xiaomi-elish-csot
+)
+pkgver=0.1
+pkgrel=0
+_arches=specific
+arch=(aarch64)
+license=(MIT)
+makedepends=(devicepkg-helpers)
+_commit="b5e0ae474285b5894000527d5c4dbfa6d1b1f291"
+source=(
+    "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/device/community/device-xiaomi-elish/deviceinfo"
+    machine-info
+    xiaomi-elish.conf
+)
+
+# Although deviceinfo is almost impossible to update, the following options have been added just in case.
+# source=(
+#     "https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/${_commit}/device/community/device-xiaomi-elish/deviceinfo"
+#     machine-info
+#     xiaomi-elish.conf
+# )
+
+sha256sums=('59fdc4d97804a69bfc05a4e90339a07404d2f2d40f0bd0ed8fb149a4adffe737'
+            'cfadcb7bf6ca2af12962b9118ccbac3396bb17266a44c12d580d30a51a401b27'
+            '20ad52960dd0741a7417d8b545693b44a610474f99c6a2f9bab9e242b0c250d4')
+
+package_device-sm8250-xiaomi-elish-common() {
+    depends=(
+        device-sm8250-common
+        firmware-sm8250-xiaomi-elish
+        meta-qbootctl
+    )
+    install -Dm644 "$srcdir"/xiaomi-elish.conf "$pkgdir"/etc/kupfer/mkinitcpio.conf.d/xiaomi-elish.conf
+    install -Dm644 "$srcdir"/machine-info "$pkgdir"/etc/machine-info
+}
+
+package_device() {
+    local variant="$1"
+    cp "$srcdir"/deviceinfo "$srcdir"/deviceinfo_
+    filter_deviceinfo "$variant" "$srcdir"/deviceinfo_
+    cat >>"$srcdir"/deviceinfo_ <<EOF
+
+deviceinfo_partitions_data="/dev/sda35"
+EOF
+    install -Dm644 "$srcdir"/deviceinfo_ "$pkgdir"/etc/kupfer/deviceinfo
+}
+
+package_device-sm8250-xiaomi-elish-boe() {
+    depends=(device-sm8250-xiaomi-elish-common)
+    pkgdesc="Xiaomi Mi Pad 5 Pro: BOE panel edition"
+    package_device boe
+}
+
+package_device-sm8250-xiaomi-elish-csot() {
+    depends=(device-sm8250-xiaomi-elish-common)
+    pkgdesc="Xiaomi Mi Pad 5 Pro: CSOT panel edition"
+    package_device csot
+}
+

@@ -1,0 +1,46 @@
+_mode=cross
+_nodeps=true
+pkgname=device-sm8250-common
+pkgdesc="Common package for Qualcomm SM8250 devices"
+pkgver=0.1
+pkgrel=0
+_arches=specific
+arch=(aarch64)
+license=(MIT)
+depends=(
+    linux-firmware-ath11k
+    linux-firmware-qca
+    linux-firmware-qcom
+    linux-sm8250
+    pd-mapper-git
+    qrtr-git
+    rmtfs-git
+    tqftpserv-git
+    alsa-ucm-conf
+    boot-android-common
+)
+install=sm8250-common.install
+source=(
+    elish.conf
+    elish_HiFi.conf
+    sm8250-common.conf
+)
+
+sha256sums=('6d41ad55cbd0cc27ba7933ed8b7caf192007f0c58cd61b6327da436826e72735'
+            'b8db0137bba721659a70d0f11cb2669f5bcb1b24041e4fef0f1423566efc24cb'
+            '265e6d3579decf81b0378cdc28592603e14d8778e3ba721a16f8c60ae826f9a5')
+
+package() {
+    install -Dm644 "$srcdir"/sm8250-common.conf "$pkgdir"/etc/kupfer/mkinitcpio.conf.d/sm8250-common.conf
+
+    mkdir -p "$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250"
+
+	install -Dm644 "$srcdir/elish.conf" \
+		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/elish/elish.conf"
+
+	install -Dm644 "$srcdir/elish_HiFi.conf" \
+		"$pkgdir/usr/share/alsa/ucm2/Xiaomi/elish/HiFi.conf"
+
+	ln -s ../../Xiaomi/elish/elish.conf \
+	  "$pkgdir/usr/share/alsa/ucm2/conf.d/sm8250/Xiaomi Mi Pad 5 Pro.conf"
+}

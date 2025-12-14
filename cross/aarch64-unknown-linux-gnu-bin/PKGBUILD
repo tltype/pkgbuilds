@@ -4,7 +4,14 @@ pkgdesc="aarch64 crosscompiler binaries from ArchlinuxARM"
 pkgver=14.1.1
 pkgrel=1
 _arches=specific
-arch=(x86_64)
+arch=(
+    armv5
+    armv6h
+    armv7h
+    aarch64
+    i686
+    x86_64
+)
 license=(
     GPL3
     LGPL

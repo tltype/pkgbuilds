@@ -2,7 +2,7 @@ _mode=cross
 _pkgbase=linux-firmware
 pkgbase=firmware-linux
 pkgdesc="Firmware files for Linux"
-pkgver=20250708
+pkgver=20251125
 pkgrel=1
 _arches=specific
 arch=(any)
@@ -15,11 +15,11 @@ url="https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=su
 provides=(linux-firmware)
 makedepends=(git)
 options=(!strip)
-source=("https://gitlab.com/kernel-firmware/linux-firmware/-/archive/${pkgver}/linux-firmware-${pkgver}.tar.gz")
-sha256sums=(bc9a2ff1223e2e1ae896816c2b7cab2f5029a6d59600e1daf032a876e6d2ce18)
-
+# source=("https://gitlab.com/kernel-firmware/linux-firmware/-/archive/${pkgver}/linux-firmware-${pkgver}.tar.gz")
+source=("https://kernel.org/pub/linux/kernel/firmware/linux-firmware-${pkgver}.tar.gz")
+sha256sums=(e5584ec015679b92595b5b93e61842e30a91c7b0d30c1f4ddf1d982797e191d5)
 _dir="linux-firmware-${pkgver}"
-_folders="qcom qca ath10k"
+_folders="qcom qca ath10k ath11k"
 # Full list of all folders. We only enable the ones we actually need, because it slows down makepkg extremely
 #_folders="3com acenic adaptec advansys amd amd-ucode amdgpu ar3k ath10k ath11k
 #    ath6k ath9k_htc atmel atusb av7110 bnx2 bnx2x brcm cadence cavium cis cpia2

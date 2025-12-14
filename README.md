@@ -12,7 +12,7 @@ Use the path of the package: `kupferboostrap packages build main/base-kupfer`
 
 1. Pulls the [Kupfer official pkgbuilds](https://gitlab.com/kupfer/packages/pkgbuilds/-/blob/55772c28cec2c2761553679be42f5c3767613126) and merges these following directories from [selcarpa/arch4elish-pkgbuilds](https://github.com/selcarpa/arch4elish-pkgbuilds/tree/f6a02af21223c70a4c16350238ee695b6df556fa) into the corresponding locations in the Kupfer official pkgbuilds.
 
-```
+```shell
 device/device-sm8250-xiaomi-elish
 
 device/device-sm8250-common
@@ -25,7 +25,7 @@ linux/sm8250
 
 2. Update the linux firmware to version 20251125.
 
-```
+```shell
 firmware/linux/PKGBUILD:
 
 pkgver=20250708 --> pkgver=20251125
@@ -40,7 +40,7 @@ _folders="qcom qca ath10k" --> _folders="qcom qca ath10k ath11k"
 
 3. Update the upstream [lujianhua/xiaomi-elish-firmware](https://github.com/lujianhua/xiaomi-elish-firmware/tree/51e9ac8cd91d88de43fb016530b9421a2713467a) repository.
 
-```
+```shell
 firmware/sm8250-xiaomi-elish/PKGBUILD:
 
 _commit="..." # Change to latest commit
@@ -51,7 +51,7 @@ sha256sums=(...) # Change to latest commit
 
 4. Sync with the upstream [linux kernel 6.11.0](https://gitlab.com/postmarketOS/pmaports/-/blob/ed6f5f38b373962216b0dd96e0db7db0f8cf338f/device/testing/linux-postmarketos-qcom-sm8250)
 
-```
+```shell
 linux/sm8250/PKGBUILD:
 
 pkgver=6.9.0 --> pkgver=6.11.0
@@ -70,7 +70,7 @@ sha256sums=(...) # Change to latest commit
 
 5. deviceinfo
 
-```
+```shell
 device/device-sm8250-xiaomi-elish/PKGBUILD:
 
 # Although deviceinfo is almost impossible to update, the following options have been added just in case.
@@ -84,7 +84,7 @@ device/device-sm8250-xiaomi-elish/PKGBUILD:
 
 6. Addition of architecture support for cross-compilation libraries. This adjustment was made due to recurring errors encountered during compilation related to `cross/aarch64-unknown-linux-gnu-bin` and `cross/arm-unknown-linux-gnueabihf-bin` not supporting the aarch64 architecture. If you do not encounter such issues, it is recommended to retain the original configuration.
 
-```
+```shell
 cross/aarch64-unknown-linux-gnu-bin/PKGBUILD and cross/arm-unknown-linux-gnueabihf-bin/PKGBUILD:
 
 arch=(x86_64) --> arch=(x86_64 armv5 armv6h armv7h aarch64 i686)

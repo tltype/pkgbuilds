@@ -82,7 +82,35 @@ device/device-sm8250-xiaomi-elish/PKGBUILD:
 
 ```
 
-6. Addition of architecture support for cross-compilation libraries. This adjustment was made due to recurring errors encountered during compilation related to `cross/aarch64-unknown-linux-gnu-bin` and `cross/arm-unknown-linux-gnueabihf-bin` not supporting the aarch64 architecture. If you do not encounter such issues, it is recommended to retain the original configuration.
+6. Add kernel configuration
+
+```shell
+common/linux/extra_config, Append:
+
+# Core Protocol Stack (Foundation)
+CONFIG_IPV6=y
+CONFIG_VLAN_8021Q=y
+CONFIG_LLC=y
+CONFIG_STP=y
+
+# Network Features (Applications)
+CONFIG_BRIDGE=y
+CONFIG_BRIDGE_NETFILTER=y
+
+# Firewall and Raw Tables
+CONFIG_NF_CONNTRACK=y
+CONFIG_IP_NF_IPTABLES=y
+CONFIG_IP6_NF_IPTABLES=y
+CONFIG_IP_NF_RAW=y
+CONFIG_IP6_NF_RAW=y
+
+# Physdev match and connection tracking
+CONFIG_NETFILTER_XT_MATCH_PHYSDEV=y
+CONFIG_NETFILTER_XT_TARGET_CT=y
+
+```
+
+7. Introducing compatibility support for aarch64 architecture in cross-compilation libraries. This adjustment was made due to recurring errors encountered during compilation related to `cross/aarch64-unknown-linux-gnu-bin` and `cross/arm-unknown-linux-gnueabihf-bin` not supporting the aarch64 architecture. If you do not encounter such issues, it is recommended to retain the original configuration.
 
 ```shell
 cross/aarch64-unknown-linux-gnu-bin/PKGBUILD and cross/arm-unknown-linux-gnueabihf-bin/PKGBUILD:
@@ -90,3 +118,4 @@ cross/aarch64-unknown-linux-gnu-bin/PKGBUILD and cross/arm-unknown-linux-gnueabi
 arch=(x86_64) --> arch=(x86_64 armv5 armv6h armv7h aarch64 i686)
 
 ```
+
